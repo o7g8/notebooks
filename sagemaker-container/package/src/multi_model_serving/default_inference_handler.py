@@ -19,7 +19,7 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         """
         #return xgb_encoders.decode(input_data, content_type)
         #TODO: use my own code
-        print "Doing default_input_fn"
+        print("Doing default_input_fn")
         return ""
 
     def default_predict_fn(self, data, model):
@@ -31,7 +31,7 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         """
         #TODO: use my own code 
         # output = model.predict(data, validate_features=False)
-        print "Doing default_predict_fn"
+        print("Doing default_predict_fn")
         output = "";
         
         return output
@@ -47,5 +47,5 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         """
         #return encoder.encode(prediction, accept)
             #TODO: use my own code
-        print "Doing default_output_fn"
+        print("Doing default_output_fn")
         return ""

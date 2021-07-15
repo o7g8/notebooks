@@ -8,7 +8,7 @@ cd ../package/ || exit 1
 python setup.py sdist || exit 1
 cp dist/multi_model_serving-1.0.0.tar.gz ../docker/code/ || exit 1
 
-docker build -f ../docker/Dockerfile -t $REPO_NAME ../docker
+docker build --no-cache -f ../docker/Dockerfile -t $REPO_NAME ../docker
 
 docker tag $REPO_NAME $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest
 
