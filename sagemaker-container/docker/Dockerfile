@@ -11,7 +11,7 @@ LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 RUN apt-get update && \
     apt-get -y install \
         build-essential \
-        libatlas-dev \
+        libatlas-base-dev  \
         git \
         wget \
         curl \

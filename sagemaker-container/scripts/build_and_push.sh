@@ -4,10 +4,11 @@ ACCOUNT_ID=$1
 REGION=$2
 REPO_NAME=$3
 
-cd ../package/ && python setup.py sdist && cp dist/multi_model_serving-1.0.0.tar.gz docker/code/
+cd ../package/ || exit 1
+python setup.py sdist || exit 1
+cp dist/multi_model_serving-1.0.0.tar.gz ../docker/code/ || exit 1
 
-#docker build -f ../docker/Dockerfile -t $REPO_NAME ../docker
-docker build -f ../docker/Dockerfile -t $REPO_NAME 
+docker build -f ../docker/Dockerfile -t $REPO_NAME ../docker
 
 docker tag $REPO_NAME $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest
 
