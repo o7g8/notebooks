@@ -1,4 +1,4 @@
-# notebooks
+# notebooks 
 ---
 
 These notebooks complement the working paper [Differential Machine Learning](https://arxiv.org/abs/2005.02347) by Brian Huge and [Antoine Savine](https://antoinesavine.com) (2020), including code, practical implementation considerations and extensions. 
