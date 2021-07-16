@@ -1,6 +1,6 @@
 import pickle as pkl
 from sagemaker_inference import content_types, decoder, default_inference_handler, encoder, errors
-from multi_model_serving import encoder as xgb_encoders
+#from multi_model_serving import encoder as xgb_encoders
 
 class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHandler):
 

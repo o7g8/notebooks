@@ -21,11 +21,15 @@ RUN apt-get update && \
 # Force stdin, stdout and stderr to be totally unbuffered. Good for logging
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8
 
+RUN mkdir -p /opt/ml/model
+
 # Install MMS, and SageMaker Inference Toolkit to set up MMS
+RUN pip --no-cache-dir install -U pip
 RUN pip --no-cache-dir install multi-model-server \
                                sagemaker-inference \
                                retrying
-                                
+RUN pip --no-cache-dir install mlio 
+
 WORKDIR /
 
 COPY code/multi_model_serving-1.0.0.tar.gz /multi_model_serving-1.0.0.tar.gz
