@@ -2,6 +2,8 @@ import numpy as np
 import blackscholes as bs
 from predictor import predict
 
+import json
+
 
 def invokePredict(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None):
     # simulation
@@ -30,6 +32,10 @@ def test():
 
 
 print("testing...")
-result = test()
-print(result)
+prediction, diff = test()
+jsonResult = json.dumps({
+    'prediction': prediction.tolist(),
+    'diff': diff.tolist(),
+})
+print(jsonResult)
 print("test done.")
