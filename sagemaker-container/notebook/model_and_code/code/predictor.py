@@ -466,4 +466,4 @@ def predict(xTest, size, isDiff : bool, xTrain, yTrain, dydxTrain, weightSeed=No
     trainingType = "differential training" if isDiff  else "standard training" 
     regressor.train(trainingType)
     predictions, deltas = regressor.predict_values_and_derivs(xTest)
-    return predictions, deltas[:, deltidx]
+    return predictions[:, deltidx], deltas[:, deltidx]
