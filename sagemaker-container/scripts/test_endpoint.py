@@ -25,6 +25,7 @@ inputJson = json.dumps({
     'yTrain': yTrain,
     'dydxTrain': dydxTrain
 })
+print('Sent payload size: ' + str(len(inputJson)))
 
 client = boto3.client('sagemaker-runtime')
 response = client.invoke_endpoint(
@@ -35,6 +36,7 @@ response = client.invoke_endpoint(
     Body=inputJson
 )
 resultStr = response['Body'].read().decode("utf-8")
+print('Received payload size: ' + str(len(resultStr)))
 result = json.loads(resultStr)
 print(result['prediction'])
 print(result['diff'])
