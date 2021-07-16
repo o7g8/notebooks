@@ -20,12 +20,6 @@ print("GPU support = ", tf.test.is_gpu_available())
 
 # import other useful libs
 import numpy as np
-from tqdm import tqdm_notebook
-
-#from scipy.stats import norm
-#import matplotlib.pyplot as plt
-#import time
-
 
 # representation of real numbers in TF, change here for 32/64 bits
 real_type = tf.float32
@@ -277,8 +271,8 @@ def train(description,
     if callback and 0 in callback_epochs:
         callback(approximator, 0)
         
-    # loop on epochs, with progress bar (tqdm)
-    for epoch in tqdm_notebook(range(epochs), desc=description):
+    # loop on epochs
+    for epoch in range(epochs):
         
         # interpolate learning rate in cycle
         learning_rate = np.interp(epoch / epochs, lr_schedule_epochs, lr_schedule_rates)

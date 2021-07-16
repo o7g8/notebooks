@@ -30,5 +30,6 @@ def test():
 
 
 print("testing...")
-test()
+result = test()
+print(result)
 print("test done.")

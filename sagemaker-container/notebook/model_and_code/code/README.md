@@ -11,3 +11,9 @@ Run the container:
 ```bash
 docker run -it --rm test-difflearning
 ```
+
+Run the test in the container:
+
+```bash
+python test.py 
+```
