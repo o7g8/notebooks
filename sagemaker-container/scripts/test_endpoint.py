@@ -1,10 +1,15 @@
 #!/usr/bin/python
 
 from argparse import ArgumentParser
+import numpy as np
 import boto3
 import json
 import test
 
+# list -> transposed (columnar) np array
+def list2arrt(l):
+    x = np.array(l)[:, np.newaxis]
+    return x.transpose().T
 
 parser = ArgumentParser()
 parser.add_argument("-e", "--endpoint-name", dest="endpointname", required=True,
@@ -33,3 +38,4 @@ resultStr = response['Body'].read().decode("utf-8")
 result = json.loads(resultStr)
 print(result['prediction'])
 print(result['diff'])
+#print(list2arrt(result['prediction']))

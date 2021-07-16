@@ -4,7 +4,7 @@ import blackscholes as bs
 def flatten(x):
     return x[:, 0].tolist()
 
-def invokeCreateArgs(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None):
+def invokeCreateArgs(generator, nTest, size, isDiff: bool, simulSeed, testSeed=None):
     # simulation
     print("simulating training, valid and test sets")
     xTrain, yTrain, dydxTrain = generator.trainingSet(size, seed=simulSeed)
