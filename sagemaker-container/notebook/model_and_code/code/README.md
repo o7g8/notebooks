@@ -1,5 +1,9 @@
 # Predictor for differential learning
 
+The entry point is `predictor.predict()`.
+
+The test entry point is `test.test()`.
+
 Create container:
 
 ```bash
