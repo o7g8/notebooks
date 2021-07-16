@@ -1,11 +1,17 @@
 import pickle as pkl
 import json
+import numpy as np
 from sagemaker_inference import content_types, decoder, default_inference_handler, encoder, errors
-from multi_model_serving import test as t
-#from multi_model_serving import encoder as xgb_encoders
+from multi_model_serving import predictor as pr
 
+def list2arrt(l):
+    x = np.array(l)[:, np.newaxis]
+    return x.transpose().T
+        
 class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHandler):
 
+
+        
     def default_input_fn(self, input_data, content_type):
         """Take request data and de-serializes the data into an object for prediction.
         When an InvokeEndpoint operation is made against an Endpoint running SageMaker model server,
@@ -22,7 +28,9 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         #return xgb_encoders.decode(input_data, content_type)
         #TODO: use my own code
         print("Doing default_input_fn")
-        return ""
+        input = json.loads(input_data)
+        # (xTest, size, isDiff, xTrain, yTrain, dydxTrain)
+        return (list2arrt(input['xTest']), input['size'], input['isDiff'], list2arrt(input['xTrain']), list2arrt(input['yTrain']), list2arrt(input['dydxTrain'])) 
 
     def default_predict_fn(self, data, model):
         """A default predict_fn. Calls a model on data deserialized in input_fn.
@@ -34,8 +42,8 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         #TODO: use my own code 
         # output = model.predict(data, validate_features=False)
         print("Doing default_predict_fn")
-        print(data)
-        result = t.test()
+        (xTest, size, isDiff, xTrain, yTrain, dydxTrain) = data
+        result = pr.predict(xTest, size, isDiff, xTrain, yTrain, dydxTrain)
         return result
 
     def default_output_fn(self, prediction, accept):
