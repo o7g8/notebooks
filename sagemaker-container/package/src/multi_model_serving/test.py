@@ -1,6 +1,6 @@
 import numpy as np
-import blackscholes as bs
-from predictor import predict
+from multi_model_serving import blackscholes as bs
+from multi_model_serving import predictor as pr
 
 
 def invokePredict(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None):
@@ -10,7 +10,7 @@ def invokePredict(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None
     xTest, xAxis, yTest, dydxTest, vegas = generator.testSet(num=nTest, seed=testSeed)
     print("done")
     # (xTest, size, isDiff : bool, xTrain, yTrain, dydxTrain, weightSeed=None, deltidx=0)
-    return predict(xTest, size, isDiff, xTrain, yTrain, dydxTrain)
+    return pr.predict(xTest, size, isDiff, xTrain, yTrain, dydxTrain)
 
 def test():
     # simulation set sizes to perform
