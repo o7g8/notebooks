@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+// Not necessary for Python, should still be declared to avoid name collisions 
+// in the Protocol Buffers namespace and non-Python languages
+package difflearning;
+
+message InputParams {
+   // Elements of the todo list will be defined here
+   repeated double xTest = 1 [packed=true];
+   int32 size = 2;
+   bool isDiff = 3;
+   repeated double xTrain = 4 [packed=true];
+   repeated double yTrain = 5 [packed=true];
+   repeated double dydxTrain = 6 [packed=true];
+}
