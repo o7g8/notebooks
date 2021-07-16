@@ -1,6 +1,8 @@
 import pickle as pkl
 from sagemaker_inference import content_types, decoder, default_inference_handler, encoder, errors
 #from multi_model_serving import encoder as xgb_encoders
+import json
+import test as t
 
 class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHandler):
 
@@ -23,7 +25,7 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         return ""
 
     def default_predict_fn(self, data, model):
-        """A default predict_fn for XGBooost Framework. Calls a model on data deserialized in input_fn.
+        """A default predict_fn. Calls a model on data deserialized in input_fn.
         Args:
             input_data: input data (Numpy array) for prediction deserialized by input_fn
             model: XGBoost model loaded in memory by model_fn
@@ -32,9 +34,9 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         #TODO: use my own code 
         # output = model.predict(data, validate_features=False)
         print("Doing default_predict_fn")
-        output = "";
-        
-        return output
+        print(data)
+        result = t.test()
+        return result
 
     def default_output_fn(self, prediction, accept):
         """A default output_fn for XGBoost. Serializes predictions from predict_fn to JSON, CSV or NPY format.
@@ -46,6 +48,11 @@ class DefaultDiffDLInferenceHandler(default_inference_handler.DefaultInferenceHa
         Returns: output data serialized
         """
         #return encoder.encode(prediction, accept)
-            #TODO: use my own code
         print("Doing default_output_fn")
-        return ""
+        print(accept)
+        pred, diff = prediction
+        jsonResult = json.dumps({
+            'prediction': pred.tolist(),
+            'diff': diff.tolist(),
+        })
+        return jsonResult

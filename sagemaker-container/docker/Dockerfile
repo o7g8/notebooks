@@ -28,7 +28,7 @@ RUN pip --no-cache-dir install -U pip
 RUN pip --no-cache-dir install multi-model-server \
                                sagemaker-inference \
                                retrying
-RUN pip --no-cache-dir install mlio 
+RUN pip --no-cache-dir install tensorflow numpy scipy
 
 WORKDIR /
 
