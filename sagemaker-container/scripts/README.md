@@ -19,6 +19,7 @@ python3 test_serialization.py
 
 | Protocol | raw, bytes | base64, bytes |
 |:---|----:|---:|
+|in-memory| 26016| -|
 |msgpack| 28607| 38144|
 |lz4(msgpack)| 19651| 26204|
 |json| 48263| 64352|

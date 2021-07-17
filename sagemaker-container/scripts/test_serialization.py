@@ -1,4 +1,5 @@
 import test
+import sys
 import json
 import msgpack
 import lz4.frame
@@ -28,6 +29,15 @@ mydict = {
     'yTrain': yTrain,
     'dydxTrain': dydxTrain
 }
+print('raw in-memory: ' + str(
+    sys.getsizeof(mydict)
+    + sys.getsizeof(xTest)
+    + sys.getsizeof(size)
+    + sys.getsizeof(isDiff)
+    + sys.getsizeof(xTrain)
+    + sys.getsizeof(yTrain)
+    + sys.getsizeof(dydxTrain)
+    ))
 msgPacked  = msgpack.packb(mydict)
 reportSize('msgpack', msgPacked)
 
