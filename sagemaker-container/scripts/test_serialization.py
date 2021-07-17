@@ -15,11 +15,20 @@ import args_pb2 as pb
 def printSize(prefix, blob):
     print(prefix + ': ' + str(len(blob)) + ' ' + str(len(base64.b64encode(blob))))
 
-def reportSize(prefix, blob):
-    printSize(prefix, blob)
-    lz4Packed = lz4.frame.compress(blob, lz4.frame.COMPRESSIONLEVEL_MAX)
-    printSize('lz4('+prefix+')', lz4Packed)
+def l(x):
+    return len(x)
+def lb64(x):
+    return l(base64.b64encode(x))
 
+
+def reportSize(prefix, blob):
+    #printSize(prefix, blob)
+    p = lz4.frame.compress(blob, lz4.frame.COMPRESSIONLEVEL_MAX)
+    #printSize('lz4('+prefix+')', lz4Packed)
+    print(f"|{prefix} | {l(blob)} | {lb64(blob)} | {l(p)} | {lb64(p)} |")
+
+print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |")
+print("|:---|----:|---:|---:|---:|")
 (xTest, size, isDiff, xTrain, yTrain, dydxTrain) = test.test()
 mydict = {
     'xTest': xTest,

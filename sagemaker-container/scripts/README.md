@@ -32,3 +32,13 @@ python3 test_serialization.py
 |lz4(bson)| 25759| 34348|
 |protobuf| 25393| 33860|
 |lz4(protobuf)| 18050| 24068|
+
+| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |
+|:---|----:|---:|---:|---:|
+|raw in-memory | 26016 | | | |
+|msgpack | 28607 | 38144 | 19841 | 26456 |
+|json | 48474 | 64632 | 27969 | 37292 |
+|pickle | 28644 | 38192 | 19867 | 26492 |
+|arrow | 43008 | 57344 | 31508 | 42012 |
+|bson | 40946 | 54596 | 25897 | 34532 |
+|protobuf | 25393 | 33860 | 18244 | 24328 |
