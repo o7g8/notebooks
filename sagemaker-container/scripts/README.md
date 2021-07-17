@@ -17,25 +17,11 @@ python3 test_serialization.py
 
 ## Serialization comparison
 
-| Protocol | raw, bytes | base64, bytes |
-|:---|----:|---:|
-|in-memory| 26016| -|
-|msgpack| 28607| 38144|
-|lz4(msgpack)| 19651| 26204|
-|json| 48263| 64352|
-|lz4(json)| 27810| 37080|
-|pickle| 28644| 38192|
-|lz4(pickle)| 19683| 26244|
-|arrow| 43008| 57344|
-|lz4(arrow)| 31327| 41772|
-|bson| 40946| 54596|
-|lz4(bson)| 25759| 34348|
-|protobuf| 25393| 33860|
-|lz4(protobuf)| 18050| 24068|
+Comparison of serialization protocols by amount of data sent "over the wire" from a client to the endpoint for a single calculation.
 
 | Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |
 |:---|----:|---:|---:|---:|
-|raw in-memory | 26016 | | | |
+|raw in-memory | 26016 | - | - | - |
 |msgpack | 28607 | 38144 | 19841 | 26456 |
 |json | 48474 | 64632 | 27969 | 37292 |
 |pickle | 28644 | 38192 | 19867 | 26492 |
