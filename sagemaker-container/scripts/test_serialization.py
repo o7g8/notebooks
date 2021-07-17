@@ -37,7 +37,7 @@ mydict = {
     'dydxTrain': dydxTrain
 }
 
-print(f"xTest: {lf(xTest)}; size: {lf(size)}, 'isDiff': {lf(isDiff)}, 'xTrain': {lf(xTrain)}, 'yTrain': {lf(yTrain)}, 'dydxTrain': {lf(dydxTrain)}\n")
+print(f"Raw in-memory 'xTest': {lf(xTest)}; 'size': {lf(size)}, 'isDiff': {lf(isDiff)}, 'xTrain': {lf(xTrain)}, 'yTrain': {lf(yTrain)}, 'dydxTrain': {lf(dydxTrain)}\n")
 print("| Protocol | raw, bytes | lz4(raw), bytes | base64(raw), bytes | base64(lz4(raw)), bytes |")
 print("|:---|----:|---:|---:|---:|")
 print('|raw in-memory | ' + str(
