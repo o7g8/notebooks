@@ -20,15 +20,13 @@ def l(x):
 def lb64(x):
     return l(base64.b64encode(x))
 
+def lf(x):
+    return sys.getsizeof(x)
 
 def reportSize(prefix, blob):
-    #printSize(prefix, blob)
     p = lz4.frame.compress(blob, lz4.frame.COMPRESSIONLEVEL_MAX)
-    #printSize('lz4('+prefix+')', lz4Packed)
     print(f"|{prefix} | {l(blob)} | {lb64(blob)} | {l(p)} | {lb64(p)} |")
 
-print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |")
-print("|:---|----:|---:|---:|---:|")
 (xTest, size, isDiff, xTrain, yTrain, dydxTrain) = test.test()
 mydict = {
     'xTest': xTest,
@@ -38,7 +36,11 @@ mydict = {
     'yTrain': yTrain,
     'dydxTrain': dydxTrain
 }
-print('raw in-memory: ' + str(
+
+print(f"xTest: {lf(xTest)}; size: {lf(size)}, 'isDiff': {lf(isDiff)}, 'xTrain': {lf(xTrain)}, 'yTrain': {lf(yTrain)}, 'dydxTrain': {lf(dydxTrain)}\n")
+print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |")
+print("|:---|----:|---:|---:|---:|")
+print('|raw in-memory | ' + str(
     sys.getsizeof(mydict)
     + sys.getsizeof(xTest)
     + sys.getsizeof(size)
@@ -46,7 +48,7 @@ print('raw in-memory: ' + str(
     + sys.getsizeof(xTrain)
     + sys.getsizeof(yTrain)
     + sys.getsizeof(dydxTrain)
-    ))
+    ) + ' | - | - | - |')
 msgPacked  = msgpack.packb(mydict)
 reportSize('msgpack', msgPacked)
 
