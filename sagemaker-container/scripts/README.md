@@ -19,7 +19,7 @@ python3 test_serialization.py
 
 Comparison of serialization protocols by amount of data sent "over the wire" from a client to the endpoint for a single calculation.
 
-| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |
+| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | base64(lz4(raw)), bytes |
 |:---|----:|---:|---:|---:|
 |raw in-memory | 26016 | - | - | - |
 |msgpack | 28607 | 38144 | 19841 | 26456 |

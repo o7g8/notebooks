@@ -38,7 +38,7 @@ mydict = {
 }
 
 print(f"xTest: {lf(xTest)}; size: {lf(size)}, 'isDiff': {lf(isDiff)}, 'xTrain': {lf(xTrain)}, 'yTrain': {lf(yTrain)}, 'dydxTrain': {lf(dydxTrain)}\n")
-print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | lz4(base64(raw)), bytes |")
+print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | base64(lz4(raw)), bytes |")
 print("|:---|----:|---:|---:|---:|")
 print('|raw in-memory | ' + str(
     sys.getsizeof(mydict)
