@@ -25,7 +25,7 @@ def lf(x):
 
 def reportSize(prefix, blob):
     p = lz4.frame.compress(blob, lz4.frame.COMPRESSIONLEVEL_MAX)
-    print(f"|{prefix} | {l(blob)} | {lb64(blob)} | {l(p)} | {lb64(p)} |")
+    print(f"|{prefix} | {l(blob)} | {l(p)} | {lb64(blob)} | {lb64(p)} |")
 
 (xTest, size, isDiff, xTrain, yTrain, dydxTrain) = test.test()
 mydict = {
@@ -38,7 +38,7 @@ mydict = {
 }
 
 print(f"xTest: {lf(xTest)}; size: {lf(size)}, 'isDiff': {lf(isDiff)}, 'xTrain': {lf(xTrain)}, 'yTrain': {lf(yTrain)}, 'dydxTrain': {lf(dydxTrain)}\n")
-print("| Protocol | raw, bytes | base64(raw), bytes | lz4(raw), bytes | base64(lz4(raw)), bytes |")
+print("| Protocol | raw, bytes | lz4(raw), bytes | base64(raw), bytes | base64(lz4(raw)), bytes |")
 print("|:---|----:|---:|---:|---:|")
 print('|raw in-memory | ' + str(
     sys.getsizeof(mydict)
