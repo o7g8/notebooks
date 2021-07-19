@@ -37,16 +37,18 @@ Comparison of serialization protocols by amount of data sent "over the wire" fro
 
 ## Performance testing
 
-We use Locust <http://locust.io> to test performance of the endpoint. 
+We use Locust <http://locust.io> to test performance of the endpoint.
 To minimize influence fo the network latency consider to run the test on an EC2/Cloud9 instance
 "close" to the endpoint itself.
+Set the `endpointname` to the SM Endpoint name in `test_load.py`
 
 ```bash
 pip3 install -r requirements.txt
-python3 test_load.py -e <sagemaker-endpoint-name>
+locust -f test_load.py
 ```
+
+Open `http://0.0.0.0:8089` in your browser and enter a number of clients and their request rate. You can ignore the endpoint field there.
 
 ## References
 
-- Testing of other (non-HTTP) systems with Locust <https://docs.locust.io/en/stable/testing-other-systems.html>.
-- 
+- Testing of other (non-HTTP) systems with Locust <https://docs.locust.io/en/stable/testing-other-systems.html>

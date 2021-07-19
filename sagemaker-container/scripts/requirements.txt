@@ -1,10 +1,9 @@
+boto3
 numpy
 scipy
-
 msgpack
 lz4
 pyarrow
 bson
 protobuf
-
 locust

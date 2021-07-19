@@ -1,34 +1,35 @@
 import time
-from locust import User, task
+import json
+from locust import User, task, between
+import boto3
+import test
 
-class XmlRpcClient(ServerProxy):
-    """
-    XmlRpcClient is a wrapper around the standard library's ServerProxy.
-    It proxies any function calls and fires the *request* event when they finish,
-    so that the calls get recorded in Locust.
-    """
+# Don't create real methods on the class otherwise event registration will stop working
+# see <https://stackoverflow.com/questions/62219054/locust-request-success-fire-does-not-do-anything> was a saviour here.
+class SageMakerEndpointClient:
 
-    def __init__(self, host, request_event):
-        super().__init__(host)
+    def __init__(self, sm_endpoint, request_event):
+        self._sm_endpoint = sm_endpoint
         self._request_event = request_event
+        self._client = boto3.client('sagemaker-runtime')
 
     def __getattr__(self, name):
-        func = ServerProxy.__getattr__(self, name)
-
+        
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
             request_meta = {
-                "request_type": "xmlrpc",
+                "request_type": "smSigV4",
                 "name": name,
-                "response_length": 0,  # calculating this for an xmlrpc.client response would be too hard
+                "response_length": 0,
                 "response": None,
-                "context": {},  # see HttpUser if you actually want to implement contexts
+                "context": {},
                 "exception": None,
             }
             try:
-                request_meta["response"] = func(*args, **kwargs)
-            except Fault as e:
-                request_meta["exception"] = e
+                request_meta["response"] = self._client.invoke_endpoint(*args, **kwargs)
+                request_meta["response_length"] = len(request_meta["response"]['Body'].read().decode("utf-8"))
+            except Exception as e:
+                request_meta["exception"] = e.Message
             request_meta["response_time"] = (time.perf_counter() - start_time) * 1000
             self._request_event.fire(**request_meta)  # This is what makes the request actually get logged in Locust
             return request_meta["response"]
@@ -36,27 +37,38 @@ class XmlRpcClient(ServerProxy):
         return wrapper
 
 
-class XmlRpcUser(User):
+class SageMakerEndpointUser(User):
     """
-    A minimal Locust user class that provides an XmlRpcClient to its subclasses
+    A minimal Locust user class that provides an SageMakerEndpointClient to its subclasses
     """
 
-    abstract = True  # dont instantiate this as an actual user when running Locust
+    abstract = True  # don't instantiate this as an actual user when running Locust
 
     def __init__(self, environment):
         super().__init__(environment)
-        self.client = XmlRpcClient(self.host, request_event=environment.events.request)
+        self.client = SageMakerEndpointClient(self.host, request_event=environment.events.request)
 
 
 # The real user class that will be instantiated and run by Locust
 # This is the only thing that is actually specific to the service that we are testing.
-class MyUser(XmlRpcUser):
-    host = "http://127.0.0.1:8877/"
+class MyUser(SageMakerEndpointUser):
+    endpointname = "multi-model-server-ep-2021-07-19-15-45-25"
+    wait_time = between(1,5)
 
     @task
-    def get_time(self):
-        self.client.get_time()
-
-    @task
-    def get_random_number(self):
-        self.client.get_random_number(0, 100)
+    def call_endpoint(self):
+        (xTest, size, isDiff, xTrain, yTrain, dydxTrain) = test.test()
+        inputJson = json.dumps({
+            'xTest': xTest,
+            'size': size,
+            'isDiff': isDiff,
+            'xTrain': xTrain,
+            'yTrain': yTrain,
+            'dydxTrain': dydxTrain
+        })
+        self.client.invoke_endpoint(
+            EndpointName=self.endpointname, 
+            ContentType='application/json',
+            Accept='Accept',
+            TargetModel='/model1.tar.gz',
+            Body=inputJson)
