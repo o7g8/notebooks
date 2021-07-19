@@ -14,7 +14,7 @@ class SageMakerEndpointClient:
         self._client = boto3.client('sagemaker-runtime')
 
     def __getattr__(self, name):
-        
+
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
             request_meta = {
@@ -28,8 +28,16 @@ class SageMakerEndpointClient:
             try:
                 request_meta["response"] = self._client.invoke_endpoint(*args, **kwargs)
                 request_meta["response_length"] = len(request_meta["response"]['Body'].read().decode("utf-8"))
-            except Exception as e:
+            except boto3.SageMakerRuntime.Client.exceptions.InternalFailure as e:
                 request_meta["exception"] = e.Message
+            except boto3.SageMakerRuntime.Client.exceptions.ServiceUnavailableException as e:
+                request_meta["exception"] = e.Message
+            except boto3.SageMakerRuntime.Client.exceptions.ValidationError as e:
+                request_meta["exception"] = e.Message
+            except boto3.SageMakerRuntime.Client.exceptions.ModelError as e:
+                request_meta["exception"] = e.Message
+            except Exception as e:
+                request_meta["exception"] = "Other exception"
             request_meta["response_time"] = (time.perf_counter() - start_time) * 1000
             self._request_event.fire(**request_meta)  # This is what makes the request actually get logged in Locust
             return request_meta["response"]
