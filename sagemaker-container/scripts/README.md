@@ -1,6 +1,10 @@
 # Scripts
 
+## Build the Docker container
+
 - `build_and_push.sh` - builds the Docker container
+
+## End-to-end test of the SageMaker endpoint
 
 - `test_endpoint.py` - client script to test the endpoint. Use:
 
@@ -9,13 +13,15 @@ pip3 install -r requirements.txt
 python3 test_endpoint.py -e <sagemaker-endpoint-name>
 ```
 
+## Comparison of serialization protocols
+
 - `test_serialization.py` - script to compare various serialization protocols
 
 ```bash
+pip3 install -r requirements.txt
+protoc --python_out=. args.proto
 python3 test_serialization.py
 ```
-
-## Serialization comparison
 
 Comparison of serialization protocols by amount of data sent "over the wire" from a client to the endpoint for a single calculation.
 
