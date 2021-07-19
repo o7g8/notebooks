@@ -1,13 +1,13 @@
-import test
 import sys
+import pickle
+import base64
 import json
+import bson
 import msgpack
 import lz4.frame
-import base64
 import pyarrow as pa
-import pickle
-import bson
 import args_pb2 as pb
+import test
 
 # Compile protobuf
 # protoc --python_out=. args.proto 
