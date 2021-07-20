@@ -483,9 +483,9 @@ def load_model(modelpath):
 def predict(model, payload):
     try:
         if(type(payload) == str):
-            data = [payload]
+            data = payload
         else:
-            data = [payload.decode()]# Multi model endpoints -> [payload[0]['body'].decode()]
+            data = payload.decode() # Multi model endpoints -> [payload[0]['body'].decode()]
         input = json.loads(data)
 
         xTest = list2arrt(input['xTest'])
@@ -495,11 +495,11 @@ def predict(model, payload):
         yTrain = list2arrt(input['yTrain'])
         dydxTrain = list2arrt(input['dydxTrain'])
         (pred, diff) = doPredict(xTest, size, isDiff, xTrain, yTrain, dydxTrain)
-        return [json.dumps({
+        return json.dumps({
             'prediction': pred.tolist(),
             'diff': diff.tolist(),
-        })]
+        })
 
     except Exception as e:
-        return [json.dumps({'error':str(e)})]
+        return json.dumps({'error':str(e)})
     

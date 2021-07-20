@@ -3,6 +3,8 @@ import json
 import blackscholes as bs
 import inference as pr
 
+def flatten(x):
+    return x[:, 0].tolist()
 
 def invokePredict(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None):
     # simulation
@@ -11,15 +13,15 @@ def invokePredict(generator, nTest, size, simulSeed, isDiff: bool, testSeed=None
     xTest, xAxis, yTest, dydxTest, vegas = generator.testSet(num=nTest, seed=testSeed)
     print("done")
     inputJson = json.dumps({
-        'xTest': xTest,
+        'xTest': flatten(xTest),
         'size': size,
         'isDiff': isDiff,
-        'xTrain': xTrain,
-        'yTrain': yTrain,
-        'dydxTrain': dydxTrain
+        'xTrain': flatten(xTrain),
+        'yTrain': flatten(yTrain),
+        'dydxTrain': flatten(dydxTrain)
     })
     # (xTest, size, isDiff : bool, xTrain, yTrain, dydxTrain, weightSeed=None, deltidx=0)
-    return pr.predict(xTest, size, isDiff, xTrain, yTrain, dydxTrain)
+    return pr.predict(None, inputJson)
 
 def test():
     # simulation set sizes to perform
