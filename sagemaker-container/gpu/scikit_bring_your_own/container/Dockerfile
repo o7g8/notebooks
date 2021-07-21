@@ -2,38 +2,35 @@
 # This is a Python 2 image that uses the nginx, gunicorn, flask stack
 # for serving inferences in a stable way.
 
-FROM ubuntu:16.04
+FROM tensorflow/tensorflow:latest-gpu
 
-MAINTAINER Amazon AI <sage-learner@amazon.com>
-
-
-RUN apt-get -y update && apt-get install -y --no-install-recommends \
-         wget \
-         python \
-         nginx \
-         ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Install python and other runtime dependencies
+RUN apt-get update && \
+    apt-get -y install \
+        build-essential \
+        libatlas-base-dev  \
+        git \
+        wget \
+        curl \
+        nginx \
+        ca-certificates \
+    apt clean
+    
 
 # Here we get all python packages.
-# There's substantial overlap between scipy and numpy that we eliminate by
-# linking them together. Likewise, pip leaves the install caches populated which uses
-# a significant amount of space. These optimizations save a fair amount of space in the
-# image, which reduces start up time.
-RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python get-pip.py && \
-    pip install numpy==1.16.2 scipy==1.2.1 scikit-learn==0.20.2 pandas flask gevent gunicorn && \
-        (cd /usr/local/lib/python2.7/dist-packages/scipy/.libs; rm *; ln ../../numpy/.libs/* .) && \
-        rm -rf /root/.cache
+RUN pip --no-cache-dir install -U pip
+RUN pip --no-cache-dir install flask gevent gunicorn tensorflow numpy scipy
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering our standard
 # output stream, which means that logs can be delivered to the user quickly. PYTHONDONTWRITEBYTECODE
 # keeps Python from writing the .pyc files which are unnecessary in this case. We also update
 # PATH so that the train and serve programs are found when the container is invoked.
 
-ENV PYTHONUNBUFFERED=TRUE
-ENV PYTHONDONTWRITEBYTECODE=TRUE
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8 LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
+RUN mkdir -p /opt/program
 COPY decision_trees /opt/program
 WORKDIR /opt/program
 
