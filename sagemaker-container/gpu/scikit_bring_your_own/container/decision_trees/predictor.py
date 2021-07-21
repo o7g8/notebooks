@@ -3,6 +3,7 @@
 
 import os
 import flask
+import inference
 
 prefix = '/opt/ml/'
 model_path = os.path.join(prefix, 'model')
@@ -12,13 +13,19 @@ model_path = os.path.join(prefix, 'model')
 
 class PredictionService(object):
 
-    def predict(self, input):
+    def predict(self, data):
         """For the input, do the predictions and return them.
 
         Args:
             input: The data on which to do the predictions."""
-        result = "Success!"
-        return result
+        input = json.loads(data)
+        (pred, diff) = inference.predict(input)
+        result = json.dumps({
+                'prediction': pred.tolist(),
+                'diff': diff.tolist(),
+        })
+        mimetype = 'application/json'
+        return (result, mimetype)
 
 # The flask app for serving predictions
 app = flask.Flask(__name__)
@@ -32,12 +39,12 @@ def ping():
 @app.route('/invocations', methods=['POST'])
 def transformation():
     """Do an inference on a single batch of data."""
-
-    input = flask.request.data.decode('utf-8')
-    print(f'Invoked with {input}')
-
-    # Do the prediction
-    service = PredictionService() 
-    result = service.predict(input)
-
-    return flask.Response(response=result, status=200)
+    service = PredictionService()
+    
+    try
+        data = flask.request.data.decode('utf-8')
+        (result, mimetype) = service.predict(data)
+        return flask.Response(response=result, status=200, mimetype=mimetype)
+    except Exception as e:
+        resp = json.dumps({'error':str(e)})
+        return flask.Response(response=resp, status=500, mimetype='application/json')

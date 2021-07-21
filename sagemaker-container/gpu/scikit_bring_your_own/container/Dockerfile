@@ -7,14 +7,15 @@ FROM tensorflow/tensorflow:latest-gpu
 # Install python and other runtime dependencies
 RUN apt-get update && \
     apt-get -y install \
+        apt-utils \
         build-essential \
         libatlas-base-dev  \
         git \
         wget \
         curl \
         nginx \
-        ca-certificates \
-    apt clean
+        ca-certificates
+RUN apt-get clean
     
 
 # Here we get all python packages.
