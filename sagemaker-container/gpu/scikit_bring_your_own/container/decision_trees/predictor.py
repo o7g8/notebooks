@@ -47,5 +47,6 @@ def transformation():
         (result, mimetype) = service.predict(data)
         return flask.Response(response=result, status=200, mimetype=mimetype)
     except Exception as e:
+        print(str(e))
         resp = json.dumps({'error':str(e)})
         return flask.Response(response=resp, status=500, mimetype='application/json')

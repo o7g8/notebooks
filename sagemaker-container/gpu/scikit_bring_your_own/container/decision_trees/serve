@@ -19,10 +19,14 @@ import signal
 import subprocess
 import sys
 
-cpu_count = multiprocessing.cpu_count()
+
 
 model_server_timeout = os.environ.get('MODEL_SERVER_TIMEOUT', 60)
-model_server_workers = int(os.environ.get('MODEL_SERVER_WORKERS', cpu_count))
+#cpu_count = multiprocessing.cpu_count()
+#model_server_workers = int(os.environ.get('MODEL_SERVER_WORKERS', cpu_count))
+# Use a single worker on a GPU machine to avoid "Blas GEMM launch failed" errors 
+# (the errors popup randomly after 1st succesfull invocation)
+model_server_workers = int(os.environ.get('MODEL_SERVER_WORKERS', 1))
 
 def sigterm_handler(nginx_pid, gunicorn_pid):
     try:

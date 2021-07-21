@@ -9,6 +9,12 @@ assert tf2.__version__ >= "2.0"
 tf = tf2.compat.v1
 tf.disable_eager_execution()
 
+# This hould have fixed the error: "Blas GEMM launch failed", but the fix didn't work.
+# The real fix is to have a single worker. 
+# Need to look if Nvidia MPS can help.
+configuration = tf.ConfigProto()
+configuration.gpu_options.allow_growth = True
+
 # disable annoying warnings
 tf.logging.set_verbosity(tf.logging.ERROR)
 import warnings
@@ -386,7 +392,7 @@ class Neural_Approximator():
             
         # done
         self.graph.finalize()
-        self.session = tf.Session(graph=self.graph)
+        self.session = tf.Session(graph=self.graph, config=configuration)
                         
     # prepare for training with m examples, standard or differential
     def prepare(self, 
