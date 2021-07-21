@@ -61,6 +61,7 @@ class SageMakerEndpointUser(User):
 # This is the only thing that is actually specific to the service that we are testing.
 class MyUser(SageMakerEndpointUser):
     endpointname = "multi-model-server-ep-2021-07-19-15-45-25"
+    endpointname = "multi-model-server-ep-2021-07-19-15-45-25"
     wait_time = between(1,5)
 
     @task
