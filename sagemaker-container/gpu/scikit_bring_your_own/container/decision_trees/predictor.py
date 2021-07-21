@@ -4,6 +4,7 @@
 import os
 import flask
 import inference
+import json
 
 prefix = '/opt/ml/'
 model_path = os.path.join(prefix, 'model')
@@ -41,7 +42,7 @@ def transformation():
     """Do an inference on a single batch of data."""
     service = PredictionService()
     
-    try
+    try:
         data = flask.request.data.decode('utf-8')
         (result, mimetype) = service.predict(data)
         return flask.Response(response=result, status=200, mimetype=mimetype)
